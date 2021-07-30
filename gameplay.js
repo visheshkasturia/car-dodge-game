@@ -61,12 +61,22 @@ function moveLines(){
 	};
 }
 
+
+function endGame(){
+	player.start = false;
+	startScreen.classList.remove('hide');
+	let ps = player.score + 1
+	startScreen.innerHTML = "Game over <br> Your final score is: " + ps + "<br> Click to start again"
+}
+
+
 function moveEnemy(car){
 	let enemies = document.querySelectorAll('.enemy')
 
 	for (enemy of enemies){
 		if(isCollide(car,enemy)){
 			console.log("Boom")
+			endGame();
 		}
 		if(enemy.y >= 750){
 			enemy.y = -300;
@@ -93,10 +103,10 @@ function gamePlay(){
 		moveLines();
 		moveEnemy(car);
 
-		if(keys.ArrowUp && player.y >70){
+		if(keys.ArrowUp && player.y >80){
 			player.y -= player.speed;
 		}
-		if(keys.ArrowDown && player.y < road.height - 70){
+		if(keys.ArrowDown && player.y < road.height - 80){
 			player.y += player.speed;
 		}
 		if(keys.ArrowLeft && player.x >0){
@@ -110,13 +120,16 @@ function gamePlay(){
 		car.style.top = player.y + 'px';
 		car.style.left = player.x + 'px';
 		window.requestAnimationFrame(gamePlay);
+		player.score++
+		score.innerText = 'Score :' + player.score
 	}
 
 };
 
 function start(){
-	gameArea.classList.remove('hide');
+	// gameArea.classList.remove('hide');
 	startScreen.classList.add('hide')
+	gameArea.innerHTML = "";
 	player.start = true;
 	player.score = 0;
 	window.requestAnimationFrame(gamePlay);
